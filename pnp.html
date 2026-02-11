@@ -25,10 +25,10 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     h1,
@@ -39,21 +39,43 @@
 
     /* Layout */
     header {
-      padding: 15px 30px;
+      padding: 10px 20px;
       background: var(--panel);
       border-bottom: 1px solid var(--border);
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+      }
     }
 
     .tabs {
       display: flex;
-      gap: 20px;
+      gap: 10px;
+      overflow-x: auto;
+      max-width: 100%;
+      padding-bottom: 5px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    @media (min-width: 768px) {
+      .tabs {
+        gap: 20px;
+        padding-bottom: 0;
+      }
     }
 
     .tab-button {
-      padding: 8px 16px;
+      padding: 8px 12px;
       cursor: pointer;
       opacity: 0.7;
       border: none;
@@ -61,8 +83,16 @@
       color: var(--text);
       border-bottom: 2px solid transparent;
       transition: all 0.2s;
-      font-size: 14px;
+      font-size: 13px;
+      white-space: nowrap;
       font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    @media (min-width: 768px) {
+      .tab-button {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
     }
 
     .tab-button:hover {
@@ -79,8 +109,9 @@
 
     main {
       flex: 1;
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
+      /* Prevent main from growing beyond window */
     }
 
     .view {
@@ -89,39 +120,53 @@
       left: 0;
       right: 0;
       bottom: 0;
-      padding: 20px;
+      padding: 15px;
       display: none;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    @media (min-width: 768px) {
+      .view {
+        padding: 20px;
+      }
     }
 
     .view.active {
       display: block;
-      /* Default to block for document views */
     }
 
     /* Demo View Grid */
     #demo-view.active {
-      display: grid;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
-    /* Demo View Grid */
-    #demo-view {
-      grid-template-columns: 1.2fr 1fr 0.8fr;
-      gap: 15px;
-      height: 100%;
-      padding: 15px;
-      box-sizing: border-box;
+    @media (min-width: 1000px) {
+      #demo-view.active {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 0.8fr;
+        height: 100%;
+      }
     }
 
     .panel {
       background: var(--panel);
       border-radius: 8px;
-      padding: 20px;
+      padding: 15px;
       border: 1px solid var(--border);
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
+      min-width: 0;
+      /* Webkit fix for grid/flex items */
+    }
+
+    @media (min-width: 768px) {
+      .panel {
+        padding: 20px;
+      }
     }
 
     /* Game Styles */
@@ -129,12 +174,12 @@
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 10px;
+      align-items: flex-end;
+      margin-bottom: 15px;
     }
 
     .controls label {
-      font-size: 12px;
+      font-size: 11px;
       opacity: .9;
       display: flex;
       flex-direction: column;
@@ -142,19 +187,33 @@
     }
 
     input[type=range] {
-      width: 120px;
+      width: 100px;
+    }
+
+    @media (min-width: 480px) {
+      input[type=range] {
+        width: 120px;
+      }
     }
 
     button {
       background: var(--accent);
       border: 1px solid var(--accent-dark);
       color: white;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 500;
+      font-size: 13px;
       font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       transition: all 0.2s;
+    }
+
+    @media (min-width: 768px) {
+      button {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
     }
 
     button:hover {
@@ -177,19 +236,32 @@
 
     .switches {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(12px, 1fr));
-      gap: 4px;
+      grid-template-columns: repeat(auto-fill, minmax(10px, 1fr));
+      gap: 3px;
       margin-top: 10px;
       flex: 1;
       min-height: 100px;
       align-content: start;
     }
 
+    @media (min-width: 480px) {
+      .switches {
+        grid-template-columns: repeat(auto-fill, minmax(12px, 1fr));
+        gap: 4px;
+      }
+    }
+
     .sw {
-      height: 12px;
+      height: 10px;
       border-radius: 2px;
       background: #e1e4e8;
       transition: background 0.2s;
+    }
+
+    @media (min-width: 480px) {
+      .sw {
+        height: 12px;
+      }
     }
 
     .sw.on {
@@ -204,10 +276,18 @@
 
     .status {
       display: flex;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
       align-items: center;
       margin-top: 8px;
-      font-size: 13px;
+      font-size: 12px;
+    }
+
+    @media (min-width: 480px) {
+      .status {
+        gap: 10px;
+        font-size: 13px;
+      }
     }
 
     .badge {
@@ -337,6 +417,21 @@
     .test-item.open .test-content {
       max-height: 3000px;
       padding-bottom: 15px;
+      color: #334155;
+      /* Better contrast for dark text */
+    }
+
+    .test-content p {
+      margin-bottom: 10px;
+      color: inherit;
+    }
+
+    .test-content ul {
+      list-style-type: disc;
+      margin-left: 20px;
+      margin-top: 5px;
+      color: #4a5568;
+      /* Hardened sub-text color */
     }
 
     .status-pass {
@@ -364,15 +459,17 @@
     }
 
     @media (max-width: 1000px) {
-      #demo-view {
-        grid-template-columns: 1fr;
-        overflow-y: scroll;
-        display: flex;
-        flex-direction: column;
+      .panel {
+        overflow-y: visible;
+        /* Let them expand if needed in stack */
       }
 
-      .switches {
-        grid-template-columns: repeat(20, 1fr);
+      .panel canvas {
+        height: 120px;
+      }
+
+      .panel h2 {
+        font-size: 1.2rem;
       }
     }
 
@@ -381,17 +478,25 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background: var(--bg);
       z-index: 1000;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 40px;
+      justify-content: flex-start;
+      padding: 20px;
       overflow-y: auto;
       transition: opacity 0.8s ease, visibility 0.8s;
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 768px) {
+      #splash-screen {
+        justify-content: center;
+        padding: 40px;
+      }
     }
 
     #splash-screen.hidden {
@@ -404,64 +509,116 @@
       width: 100%;
       text-align: center;
       animation: fadeIn 1s ease-out;
+      padding-top: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .splash-content {
+        padding-top: 0;
+      }
     }
 
     .splash-title {
-      font-size: 3rem;
+      font-size: 2.2rem;
       color: var(--accent);
       margin-bottom: 0.5rem;
       letter-spacing: 2px;
     }
 
+    @media (min-width: 768px) {
+      .splash-title {
+        font-size: 3rem;
+      }
+    }
+
     .splash-formula {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 1.5rem;
+      font-size: 1.1rem;
       background: var(--panel);
-      padding: 15px 30px;
+      padding: 10px 20px;
       border-radius: 12px;
       display: inline-block;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       border: 1px solid var(--accent-dark);
       box-shadow: 0 0 20px rgba(108, 124, 255, 0.1);
+      width: 100%;
+      box-sizing: border-box;
+      word-break: break-all;
+    }
+
+    @media (min-width: 768px) {
+      .splash-formula {
+        font-size: 1.5rem;
+        padding: 15px 30px;
+        width: auto;
+        word-break: normal;
+        margin-bottom: 2rem;
+      }
     }
 
     .splash-upanisad {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 30px;
+      background: rgba(0, 0, 0, 0.02);
+      padding: 20px;
       border-radius: 16px;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       text-align: left;
       border-left: 4px solid var(--warning);
       backdrop-filter: blur(10px);
     }
 
+    @media (min-width: 768px) {
+      .splash-upanisad {
+        padding: 30px;
+        margin-bottom: 2rem;
+      }
+    }
+
     .upanisad-title {
       color: var(--warning);
       font-weight: bold;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     .sanskrit-text {
-      font-size: 1.2rem;
+      font-size: 1rem;
       line-height: 1.6;
       margin-bottom: 1rem;
       color: var(--text);
     }
 
+    @media (min-width: 768px) {
+      .sanskrit-text {
+        font-size: 1.2rem;
+      }
+    }
+
     .iast-text {
       font-style: italic;
-      font-size: 0.95rem;
-      color: #aaa;
+      font-size: 0.85rem;
+      color: #666;
       margin-bottom: 1rem;
     }
 
+    @media (min-width: 768px) {
+      .iast-text {
+        font-size: 0.95rem;
+      }
+    }
+
     .translation-text {
-      font-size: 1rem;
+      font-size: 0.9rem;
       line-height: 1.5;
-      color: #dfdfdf;
+      color: #4a5568;
+      /* Hardened contrast */
+    }
+
+    @media (min-width: 768px) {
+      .translation-text {
+        font-size: 1rem;
+      }
     }
 
     .splash-footer {
@@ -749,7 +906,7 @@
           <div class="test-content">
             <p><b>Statement:</b> If a proof technique holds relative to all oracles, it cannot resolve P vs NP.</p>
             <p><b>Analysis:</b>
-            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px; color: #ccc;">
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
               <li>Oracles allow <b>nonlocal information injection</b>.</li>
               <li>The Data Processing Inequality (DPI) assumes locality of information flow.</li>
               <li>Oracle queries act as <b>free global correlations</b>.</li>
@@ -770,7 +927,7 @@
             <p><b>Statement:</b> "Natural" proofs (large, constructive, useful) cannot separate P from NP under crypto
               assumptions.</p>
             <p><b>Analysis:</b>
-            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px; color: #ccc;">
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
               <li>MIAB relies on the <b>existence of hard distributions</b> (adversarial), not generic properties.</li>
               <li>It does <b>not</b> define a recognizable property of most functions (Large).</li>
               <li>It does <b>not</b> give a polynomial-time test for hardness (Constructive).</li>
@@ -789,7 +946,7 @@
           <div class="test-content">
             <p><b>Statement:</b> Techniques extending to low-degree polynomials cannot resolve P vs NP.</p>
             <p><b>Analysis:</b>
-            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px; color: #ccc;">
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
               <li><b>No polynomials</b>, Fourier analysis, or low-degree approximations are used.</li>
               <li>Information theory is <b>representation-agnostic</b>.</li>
               <li>DPI is not preserved under algebraic lifting.</li>
@@ -808,7 +965,7 @@
           <div class="test-content">
             <p><b>Statement:</b> Proving general circuit lower bounds is extremely hard and tightly constrained.</p>
             <p><b>Analysis:</b>
-            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px; color: #ccc;">
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
               <li>MIAB does <b>not</b> bound circuit size directly.</li>
               <li>It bounds <b>information flow</b>.</li>
               <li>MIAB applies <i>before</i> the circuit representation exists.</li>
@@ -828,7 +985,7 @@
           <div class="test-content">
             <p><b>Statement:</b> Any correct P ≠ NP proof must explain why no polynomial proof system can exist.</p>
             <p><b>North Star Approach:</b>
-            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px; color: #ccc;">
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
               <li>Instead of fighting this barrier, we <b>use it as a completion metric</b>.</li>
               <li>We add the <b>Cook-Reckhow Decision–Proof Equivalence</b>: any poly-time SAT decision procedure
                 induces a poly-bounded proof system.</li>
@@ -837,7 +994,7 @@
             </p>
             <p><b>The Key Insight:</b> Proofs are information-carrying objects. If MIAB shows <i>I(Y; S_A) → 0</i>,
               then:
-            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px; color: #ccc;">
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
               <li>No polynomial-size proof can exist (zero information content)</li>
               <li>No polynomial decision procedure exists (Cook-Reckhow)</li>
               <li>The barrier is <b>satisfied</b>, not bypassed</li>
