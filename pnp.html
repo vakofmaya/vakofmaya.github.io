@@ -7,19 +7,21 @@
   <title>P vs NP — The Hidden Bit (Interactive Proof)</title>
   <style>
     :root {
-      --bg: #0f1220;
-      --panel: #171a33;
-      --text: #e8e8ef;
-      --accent: #6c7cff;
-      --accent-dark: #2b2f66;
-      --highlight: #2330a8;
-      --success: #00b894;
-      --danger: #d63031;
-      --warning: #ffd166;
+      --bg: #fdfdfd;
+      --panel: #ffffff;
+      --text: #2c3e50;
+      --accent: #1a5fb4;
+      --accent-dark: #154a8a;
+      --highlight: #f1f8ff;
+      --success: #27ae60;
+      --danger: #c0392b;
+      --warning: #f39c12;
+      --border: #e1e4e8;
     }
 
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-family: Georgia, "Times New Roman", Times, serif;
+      line-height: 1.6;
       margin: 0;
       background: var(--bg);
       color: var(--text);
@@ -37,9 +39,9 @@
 
     /* Layout */
     header {
-      padding: 10px 20px;
+      padding: 15px 30px;
       background: var(--panel);
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -53,25 +55,26 @@
     .tab-button {
       padding: 8px 16px;
       cursor: pointer;
-      opacity: 0.6;
+      opacity: 0.7;
       border: none;
       background: transparent;
       color: var(--text);
       border-bottom: 2px solid transparent;
       transition: all 0.2s;
       font-size: 14px;
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     .tab-button:hover {
-      opacity: 0.8;
+      opacity: 1;
+      color: var(--accent);
     }
 
     .tab-button.active {
       opacity: 1;
       border-bottom: 2px solid var(--accent);
-      color: var(--text);
-      background: rgba(108, 124, 255, 0.15);
-      font-weight: 500;
+      color: var(--accent);
+      font-weight: 600;
     }
 
     main {
@@ -112,9 +115,10 @@
 
     .panel {
       background: var(--panel);
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
       overflow-y: auto;
@@ -143,21 +147,32 @@
 
     button {
       background: var(--accent);
-      border: none;
+      border: 1px solid var(--accent-dark);
       color: white;
-      padding: 8px 12px;
-      border-radius: 8px;
+      padding: 8px 16px;
+      border-radius: 4px;
       cursor: pointer;
       font-weight: 500;
-      transition: transform 0.1s;
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: var(--accent-dark);
     }
 
     button:active {
-      transform: scale(0.98);
+      transform: translateY(1px);
     }
 
     button.secondary {
-      background: var(--accent-dark);
+      background: white;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    button.secondary:hover {
+      background: var(--highlight);
     }
 
     .switches {
@@ -173,7 +188,7 @@
     .sw {
       height: 12px;
       border-radius: 2px;
-      background: #2a2e5c;
+      background: #e1e4e8;
       transition: background 0.2s;
     }
 
@@ -183,6 +198,7 @@
 
     .sw.seen {
       outline: 2px solid var(--warning);
+      outline-offset: 1px;
       z-index: 10;
     }
 
@@ -197,15 +213,18 @@
     .badge {
       padding: 4px 8px;
       border-radius: 4px;
-      background: #22265a;
-      font-family: monospace;
+      background: #f1f8ff;
+      border: 1px solid #c8e1ff;
+      color: var(--accent);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
     canvas {
       width: 100%;
       height: 160px;
-      background: var(--bg);
-      border-radius: 8px;
+      background: #fafbfc;
+      border: 1px solid var(--border);
+      border-radius: 4px;
       margin-top: 10px;
     }
 
@@ -217,12 +236,13 @@
     }
 
     .line {
-      padding: 8px 12px;
-      border-radius: 8px;
-      margin: 6px 0;
-      background: #10133a;
-      border-left: 3px solid transparent;
-      transition: all 0.3s;
+      padding: 10px 15px;
+      border-radius: 4px;
+      margin: 8px 0;
+      background: #fdfdfd;
+      border: 1px solid var(--border);
+      border-left: 4px solid transparent;
+      transition: all 0.2s;
     }
 
     .line b {
@@ -233,9 +253,9 @@
 
     .hl {
       background: var(--highlight);
-      border-left-color: var(--warning);
-      transform: scale(1.02);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      border-left-color: var(--accent);
+      border-color: #c8e1ff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     /* Graph Styles */
@@ -247,12 +267,12 @@
     }
 
     .flow-text {
-      font-family: sans-serif;
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       font-size: 12px;
       fill: var(--text);
       text-anchor: middle;
       dominant-baseline: middle;
-      font-weight: bold;
+      font-weight: 600;
     }
 
     .flow-subtext {
@@ -271,8 +291,8 @@
 
     .flow-node.active {
       fill: var(--highlight);
-      stroke: var(--warning);
-      filter: drop-shadow(0 0 5px var(--highlight));
+      stroke: var(--accent);
+      stroke-width: 3px;
     }
 
     /* Tests Styles */
@@ -461,19 +481,19 @@
       padding: 12px 40px;
       font-size: 1.1rem;
       background: var(--accent);
-      border: none;
+      border: 1px solid var(--accent-dark);
       color: white;
-      border-radius: 30px;
+      border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(108, 124, 255, 0.4);
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .proceed-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(108, 124, 255, 0.6);
-      background: #7d8cff;
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     @keyframes fadeIn {
@@ -521,7 +541,7 @@
       </div>
 
       <div class="splash-footer">
-        <div class="vaak-credit">With &lt;3 from Vāak 🇮🇳</div>
+        <div class="vaak-credit">With &lt;3 from Vāk 🇮🇳</div>
         <button class="proceed-button" onclick="dismissSplash()">Enter Interactive Proof</button>
       </div>
     </div>
